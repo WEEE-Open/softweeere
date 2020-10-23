@@ -3,10 +3,11 @@ import {Button, Card} from "react-bootstrap";
 import {buttonTexts} from "../../utils";
 
 const KatacodaCard = props => {
-    const {num, embed, buttonHandler} = props;
+    const {num, embed, buttonHandler, scrollToBottom} = props;
     const [buttonText, setButtonText] = useState(buttonTexts.toPress);
 
     const toggleButton = () => {
+        if(buttonText === buttonTexts.toPress) scrollToBottom();
         setButtonText(buttonText === buttonTexts.toPress ? buttonTexts.pressed : buttonTexts.toPress);
         buttonHandler(embed);
     }
