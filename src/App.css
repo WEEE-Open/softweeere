@@ -6,3 +6,19 @@
 .navbar.bottom {
   border-top: 0.1rem solid #00983a;
 }
+
+.scrollUp {
+  position: fixed;
+  right: -100px;
+  bottom: 100px;
+  transition: right 0.5s;
+  cursor: pointer;
+  background-color: #00983a;
+  font-size: 35px;
+  padding: 0px;
+  border-radius: 4px;
+}
+
+.transitionUp {
+  right: 20px;
+}
