@@ -34,6 +34,7 @@ const App = () => {
             'isActive': false,
         }
     ]);
+    // eslint-disable-next-line
     const [color, setColor] = useState("00983a");
 
     const buttonHandler = embed => setEmbeds(prevState => {
