@@ -6,14 +6,6 @@ import KatacodaEmbed from "./mainview/KatacodaEmbed";
 const MainView = props => {
     const {embeds, buttonHandler, color} = props;
 
-    const isAnyEmbedActive = () => {
-        for(let embed of embeds) {
-            if(embed.isActive)
-                return true;
-        }
-        return false;
-    }
-
     return (
         <Container id={"MainView"}>
             {embeds ?
@@ -28,19 +20,14 @@ const MainView = props => {
                             buttonHandler={buttonHandler}
                             />)}
                     </CardColumns>
-                    {isAnyEmbedActive() &&
-                    <div>
-                        <hr/>
-                        {embeds.filter(e => e.isActive)
-                        .map((embed, idx) =>
-                            <KatacodaEmbed
-                                key={idx}
-                                num={idx}
-                                embed={embed}
-                                color={color}
-                            />)}
-                    </div>
-                    }
+                    {embeds
+                    .map((embed, idx) =>
+                        <KatacodaEmbed
+                            key={idx}
+                            num={idx}
+                            embed={embed}
+                            color={color}
+                        />)}
                 </div> :
                 <div id={"NoEmbeds"}>
                     <h1>No embeds added to the website. Maybe there's a configuration error?</h1>
