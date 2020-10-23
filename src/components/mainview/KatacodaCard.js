@@ -3,13 +3,12 @@ import {Button, Card} from "react-bootstrap";
 import {buttonTexts} from "../../utils";
 
 const KatacodaCard = props => {
-    const {num, embed, color} = props;
-    const [isEmbedActive, setIsEmbedActive] = useState(false);
+    const {num, embed, buttonHandler} = props;
     const [buttonText, setButtonText] = useState(buttonTexts.toPress);
 
     const toggleButton = () => {
         setButtonText(buttonText === buttonTexts.toPress ? buttonTexts.pressed : buttonTexts.toPress);
-        setIsEmbedActive(!isEmbedActive);
+        buttonHandler(embed);
     }
 
     return (
