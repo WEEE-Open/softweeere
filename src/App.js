@@ -11,18 +11,21 @@ const App = () => {
         {
             'type': embedTypes.python,
             'title': '🐟 S.A.R.D.I.N.A.',
+            'description': 'Statistiche Amabili Rendimento Degli Informatici Nell’Anno',
             'katacoda': 'e-caste/weee-open-sardina',
             'github': 'weee-open/sardina',
         },
         {
             'type': embedTypes.php,
             'title': '✅ WEEEhire-ng',
+            'description': 'Manage applications to the team',
             'katacoda': 'e-caste/weee-open-weeehire-ng',
             'github': 'weee-open/weeehire-ng',
         },
         {
             'type': embedTypes.python,
             'title': '🍐 P.E.R.A.C.O.T.T.A.',
+            'description': 'Progetto Esteso Raccolta Automatica Configurazioni hardware Organizzate Tramite Tarallo Autonomamente',
             'katacoda': 'e-caste/weee-open-peracotta',
             'github': 'weee-open/peracotta',
         }
