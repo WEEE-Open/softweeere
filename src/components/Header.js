@@ -7,7 +7,7 @@ const Header = props => {
     return(
         <Navbar
         expand={"sm"}
-        fixed={"top"}>
+        className={"top"}>
             <Container>
                 <Navbar.Brand
                 href={"/"}>
