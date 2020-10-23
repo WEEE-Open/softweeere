@@ -10,7 +10,7 @@ const MainView = props => {
             {embeds ?
                 <div id={"Embeds"}>
                     <h1>Try our software here!</h1>
-                    <CardColumns>
+                    <CardColumns className={"pt-3"}>
                         {embeds.map((embed, idx) => <KatacodaCard key={idx} num={idx} embed={embed} color={color} />)}
                     </CardColumns>
                 </div> :
