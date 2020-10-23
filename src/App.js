@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
-import embedTypes from "./utils";
+import utils from "./utils";
 import Header from "./components/Header";
 import MainView from "./components/MainView";
 
 const App = () => {
+    const embedTypes = utils.embedTypes;
 
     // state variables
     const [embeds, setEmbeds] = useState([
