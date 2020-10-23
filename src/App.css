@@ -3,6 +3,11 @@
   margin-bottom: 0.5rem;
 }
 
+#top-logo {
+  max-height: 69px;
+  max-width: 100%;
+}
+
 .navbar.bottom {
   border-top: 0.1rem solid #00983a;
 }
