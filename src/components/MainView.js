@@ -3,8 +3,6 @@ import {Container} from "react-bootstrap";
 import KatacodaEmbed from "./mainview/KatacodaEmbed";
 
 const MainView = props => {
-    const color = "00983a";
-
     return (
         <Container id={"MainView"}>
             {props.embeds ?

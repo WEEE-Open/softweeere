@@ -7,6 +7,7 @@ const App = () => {
 
     // state variables
     const [embeds, setEmbeds] = useState([]);
+    const [color, setColor] = useState("00983a");
 
     // componentDidMount
     useEffect(() => {
@@ -35,7 +36,7 @@ const App = () => {
     return (
         <div className="App">
             <Header />
-            <MainView embeds={embeds} />
+            <MainView embeds={embeds} color={color} />
         </div>
     );
 }
