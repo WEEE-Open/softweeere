@@ -3,6 +3,7 @@ import './App.css';
 import {embedTypes} from "./utils";
 import Header from "./components/Header";
 import MainView from "./components/MainView";
+import Footer from "./components/Footer";
 
 const App = () => {
 
@@ -53,6 +54,7 @@ const App = () => {
                 buttonHandler={buttonHandler}
                 color={color}
             />
+            <Footer />
         </div>
     );
 }
