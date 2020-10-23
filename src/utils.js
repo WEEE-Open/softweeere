@@ -1,12 +1,9 @@
-const embedTypes = {
+export const embedTypes = {
     'python': "Python",
     'php': "PHP",
 };
 
-const buttonTexts = {
+export const buttonTexts = {
     'toPress': "Try this repo!",
     'pressed': "Close the terminal",
 }
-
-const utils = {embedTypes, buttonTexts};
-export default utils;
