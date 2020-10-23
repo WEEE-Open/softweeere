@@ -12,8 +12,9 @@ const Header = props => {
                 <Navbar.Brand
                 href={"/"}>
                     <img
+                        id={"top-logo"}
                         src={"weee.svg"}
-                        height={69}
+                        className={"img-fluid"}
                         alt={"WEEE Open"}
                     />
                 </Navbar.Brand>
