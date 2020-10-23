@@ -2,6 +2,7 @@ import React, {useRef} from "react";
 import {CardColumns, Container} from "react-bootstrap";
 import KatacodaCard from "./mainview/KatacodaCard";
 import KatacodaEmbed from "./mainview/KatacodaEmbed";
+import ScrollUpButton from "react-scroll-up-button";
 
 const MainView = props => {
     const {embeds, buttonHandler, color} = props;
@@ -38,6 +39,12 @@ const MainView = props => {
                     <h1>No embeds added to the website. Maybe there's a configuration error?</h1>
                 </div>
             }
+            <ScrollUpButton
+                ContainerClassName="scrollUp"
+                TransitionClassName="transitionUp"
+            >
+                <span role="img" aria-label={"go to top"}>🔝</span>
+            </ScrollUpButton>
             <div ref={bottomOfThePageRef} />
         </Container>
     );
