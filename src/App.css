@@ -10,13 +10,14 @@
 .scrollUp {
   position: fixed;
   right: -100px;
-  bottom: 100px;
+  bottom: 150px;
   transition: right 0.5s;
   cursor: pointer;
   background-color: #00983a;
   font-size: 35px;
   padding: 0px;
   border-radius: 4px;
+  z-index: 1000;
 }
 
 .transitionUp {
