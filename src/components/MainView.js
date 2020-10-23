@@ -1,10 +1,14 @@
-import React from "react";
+import React, {useRef} from "react";
 import {CardColumns, Container} from "react-bootstrap";
 import KatacodaCard from "./mainview/KatacodaCard";
 import KatacodaEmbed from "./mainview/KatacodaEmbed";
 
 const MainView = props => {
     const {embeds, buttonHandler, color} = props;
+    const bottomOfThePageRef = useRef(null);
+    const scrollToBottom = () => {
+        bottomOfThePageRef.current.scrollIntoView({behavior: "smooth"});
+    }
 
     return (
         <Container id={"MainView"}>
@@ -18,6 +22,7 @@ const MainView = props => {
                             num={idx}
                             embed={embed}
                             buttonHandler={buttonHandler}
+                            scrollToBottom={scrollToBottom}
                             />)}
                     </CardColumns>
                     {embeds
@@ -33,6 +38,7 @@ const MainView = props => {
                     <h1>No embeds added to the website. Maybe there's a configuration error?</h1>
                 </div>
             }
+            <div ref={bottomOfThePageRef} />
         </Container>
     );
 }
