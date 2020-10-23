@@ -31,7 +31,7 @@ const KatacodaCard = props => {
                 </Button>
             </Card.Body>
             <Card.Footer>
-                <a href={`https://github.com/${embed.github}`}>GitHub page</a>
+                <a href={`https://github.com/${embed.github}`} target="_blank" rel="nofollow">GitHub page</a>
             </Card.Footer>
         </Card>
     );
