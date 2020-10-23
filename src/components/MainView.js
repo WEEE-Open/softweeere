@@ -1,6 +1,6 @@
 import React from "react";
-import {Container} from "react-bootstrap";
-import KatacodaEmbed from "./mainview/KatacodaEmbed";
+import {CardColumns, Container} from "react-bootstrap";
+import KatacodaCard from "./mainview/KatacodaCard";
 
 const MainView = props => {
     const {embeds, color} = props;
@@ -10,7 +10,9 @@ const MainView = props => {
             {embeds ?
                 <div id={"Embeds"}>
                     <h1>Try our software here!</h1>
-                    {embeds.map((embed, idx) => <KatacodaEmbed key={idx} num={idx} embed={embed} color={color} />)}
+                    <CardColumns>
+                        {embeds.map((embed, idx) => <KatacodaCard key={idx} num={idx} embed={embed} color={color} />)}
+                    </CardColumns>
                 </div> :
                 <div id={"NoEmbeds"}>
                     <h1>No embeds added to the website. Maybe there's a configuration error?</h1>
