@@ -1,4 +1,8 @@
-.navbar {
+.navbar.top {
   border-bottom: 0.1rem solid #00983a;
   margin-bottom: 0.5rem;
+}
+
+.navbar.bottom {
+  border-top: 0.1rem solid #00983a;
 }
