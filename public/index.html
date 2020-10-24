@@ -18,8 +18,11 @@
       content="A website to try out WEEE Open software in the browser"
     />
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"-->
+<!--          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="toggle-bootstrap.min.css" />
+    <link rel="stylesheet" href="toggle-bootstrap-dark.min.css" />
+    <link rel="stylesheet" href="toggle-bootstrap-print.min.css" />
     <!-- needed for katacoda embeds -->
     <script src="//katacoda.com/embed.js"></script>
     <!--
@@ -38,8 +41,28 @@
     -->
     <title>SoftWEEEre</title>
   </head>
-  <body>
+  <body id="body" class="bootstrap">
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <script>
+      const setDarkMode = enabled => {
+        const body = document.getElementById("body");
+        body.className = enabled ? "bootstrap-dark" : "bootstrap";
+      }
+
+      // detect dark mode and change theme accordingly
+      const darkModeEnabled = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setDarkMode(darkModeEnabled);
+
+      // detect changes after the website has loaded
+      window.matchMedia('(prefers-color-scheme: dark)')
+              .addEventListener('change', event => {
+                if (event.matches) {
+                  setDarkMode(true);
+                } else {
+                  setDarkMode(false);
+                }
+              });
+    </script>
     <div id="root"></div>
     <!--
       This HTML file is a template.
