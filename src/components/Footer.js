@@ -7,10 +7,10 @@ const Footer = props => {
             <Navbar
                 className={"bottom mt-5 flex-column"}
             >
-                <Navbar.Text className={"flex-row"}>
+                <p className={"flex-row"}>
                     Contribute or clone this website <a href="https://github.com/e-caste/softweeere" target="_blank" rel="nofollow noopener noreferrer">here</a>!
-                </Navbar.Text>
-                <Navbar.Text className={"flex-row"}>
+                </p>
+                <p className={"flex-row"}>
                     Follow us on Facebook:
                     <a href="https://www.facebook.com/weeeopen/" target="_blank" rel="nofollow noopener noreferrer"> Team WEEE Open</a>
                     , Instagram:
@@ -19,7 +19,7 @@ const Footer = props => {
                     <a href="https://www.linkedin.com/company/weee-open/" target="_blank" rel="nofollow noopener noreferrer"> WEEE Open </a>
                     and on PoliTOnet:
                     <a href="https://politecnico-di-torino.hivebrite.com/topics/9837/" target="_blank" rel="nofollow noopener noreferrer"> Team WEEE Open</a>
-                </Navbar.Text>
+                </p>
             </Navbar>
         </div>
     );
