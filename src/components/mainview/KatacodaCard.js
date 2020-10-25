@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Button, Card} from "react-bootstrap";
+import {Button, Card, ListGroup} from "react-bootstrap";
 import {buttonTexts} from "../../utils";
 
 const KatacodaCard = props => {
@@ -32,7 +32,14 @@ const KatacodaCard = props => {
                 </Button>
             </Card.Body>
             <Card.Footer>
-                <a href={`https://github.com/${embed.github}`} target="_blank" rel="nofollow noopener noreferrer">GitHub page</a>
+                <ListGroup className={"list-group-flush"}>
+                    <ListGroup.Item>
+                        <code>Language:</code> <img src={`${embed.type}.svg`} height={15} />
+                    </ListGroup.Item>
+                    <ListGroup.Item>
+                        <a href={`https://github.com/${embed.github}`} target="_blank" rel="nofollow noopener noreferrer">GitHub page</a>
+                    </ListGroup.Item>
+                </ListGroup>
             </Card.Footer>
         </Card>
     );
