@@ -2,10 +2,16 @@
 
 A website where you can try WEEE Open software directly in the browser.
 
-See a screenshot here:
+See a screenshot here:  
+
 ![website screenshot](readme/screenshot.png)
 
 Try it for yourself at https://softweeere.caste.dev!
+
+### Run with Docker
+
+`docker build -t softweeere .`  
+`docker run -d --name softweeere -p 80:80 softweeere`
 
 ### Licensing
 
