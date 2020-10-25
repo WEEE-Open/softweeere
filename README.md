@@ -11,7 +11,9 @@ Try it for yourself at https://softweeere.caste.dev!
 ### Run with Docker
 
 `docker build -t softweeere .`  
-`docker run -d --name softweeere -p 80:80 softweeere`
+`docker run -d --name softweeere -p 80:80 softweeere`  
+See logs with  
+`sudo tail -f $(docker inspect --format='{{.LogPath}}' softweeere)`
 
 ### Licensing
 
