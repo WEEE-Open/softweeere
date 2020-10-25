@@ -11,7 +11,8 @@ const App = () => {
     const [embeds, setEmbeds] = useState([
         {
             'type': embedTypes.python,
-            'title': '🐟 S.A.R.D.I.N.A.',
+            'title': 'S.A.R.D.I.N.A.',
+            'image': 'fish-1f41f.svg',
             'description': 'Statistiche Amabili Rendimento Degli Informatici Nell’Anno',
             'katacoda': 'e-caste/weee-open-sardina',
             'github': 'weee-open/sardina',
@@ -19,7 +20,8 @@ const App = () => {
         },
         {
             'type': embedTypes.php,
-            'title': '✅ WEEEhire-ng',
+            'title': 'WEEEhire-ng',
+            'image': 'checkmark-2705.svg',
             'description': 'Manage applications to the team',
             'katacoda': 'e-caste/weee-open-weeehire-ng',
             'github': 'weee-open/weeehire-ng',
@@ -27,7 +29,8 @@ const App = () => {
         },
         {
             'type': embedTypes.python,
-            'title': '🍐 P.E.R.A.C.O.T.T.A.',
+            'title': 'P.E.R.A.C.O.T.T.A.',
+            'image': 'pear-1f350.svg',
             'description': 'Progetto Esteso Raccolta Automatica Configurazioni hardware Organizzate Tramite Tarallo Autonomamente',
             'katacoda': 'e-caste/weee-open-peracotta',
             'github': 'weee-open/peracotta',
