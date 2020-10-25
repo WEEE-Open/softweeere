@@ -36,7 +36,7 @@ const KatacodaCard = props => {
             <Card.Footer>
                 <ListGroup className={"list-group-flush"}>
                     <ListGroup.Item>
-                        <code>Language:</code> <img src={`${embed.type}.svg`} height={15} />
+                        <code>Language:</code> <img src={`${embed.type}.svg`} height={15} alt={`language is ${embed.type}`} />
                     </ListGroup.Item>
                     <ListGroup.Item>
                         <a href={`https://github.com/${embed.github}`} target="_blank" rel="nofollow noopener noreferrer">GitHub page</a>
