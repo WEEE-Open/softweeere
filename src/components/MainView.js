@@ -15,7 +15,10 @@ const MainView = props => {
         <Container id={"MainView"}>
             {embeds ?
                 <div id={"Embeds"}>
-                    <h1>Try our software here!</h1>
+                    {/*see https://code.luasoftware.com/tutorials/bootstrap/bootstrap-hide-element-based-on-viewport-size/*/}
+                    <h1 className={"d-none d-md-block"}>Try our software here!</h1>
+                    <h2 className={"d-none d-sm-block d-md-none"}>Try our software here!</h2>
+                    <h3 className={"d-block d-sm-none"}>Try our software here!</h3>
                     <CardColumns className={"pt-3"}>
                         {embeds.map((embed, idx) =>
                             <KatacodaCard
