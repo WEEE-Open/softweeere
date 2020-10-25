@@ -17,9 +17,11 @@ const KatacodaCard = props => {
             border={"success"}
         >
             <Card.Img
-                src={`${embed.type}.svg`}
+                src={`card-imgs/${embed.image}`}
                 alt={embed.title}
+                height={90}
                 variant={"top"}
+                className={"mt-2"}
             />
             <Card.Body>
                 <Card.Title>{embed.title}</Card.Title>
