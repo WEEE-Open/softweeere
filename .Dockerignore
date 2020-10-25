@@ -1,0 +1,9 @@
+.git/
+node_modules/
+public/
+readme/
+src/
+twemoji/
+.gitignore
+package*
+*.md
