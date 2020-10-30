@@ -21,7 +21,7 @@ const Footer = props => {
                     <a href="https://politecnico-di-torino.hivebrite.com/topics/9837/" target="_blank" rel="nofollow noopener noreferrer"> Team WEEE Open</a>
                 </p>
                 <p>
-                    Licensing found <a href={"https://github.com/e-caste/softweeere#licensing"} target="_blank" rel="nofollow noopener noreferrer">here</a>.
+                    Licensing found <a href={"https://github.com/weee-open/softweeere#licensing"} target="_blank" rel="nofollow noopener noreferrer">here</a>.
                 </p>
             </Navbar>
         </div>
