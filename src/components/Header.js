@@ -13,7 +13,7 @@ const Header = props => {
                 href={"/"}>
                     <img
                         id={"top-logo"}
-                        src={"weee.svg"}
+                        src={"logo/weee.svg"}
                         className={"img-fluid"}
                         alt={"WEEE Open"}
                     />
