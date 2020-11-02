@@ -20,7 +20,7 @@ const Footer = props => {
                     ,
                     <a href="https://www.linkedin.com/company/weee-open/" target="_blank" rel="nofollow noopener noreferrer"> LinkedIn </a>
                     and on
-                    <a href="https://politecnico-di-torino.hivebrite.com/topics/9837/" target="_blank" rel="nofollow noopener noreferrer"> PoliTOnet</a>
+                    <a href="https://politecnico-di-torino.hivebrite.com/topics/9837/" target="_blank" rel="nofollow noopener noreferrer"> PoliTOnet</a>.
                 </p>
                 <p>
                     Licensing found <a href={"https://github.com/weee-open/softweeere#licensing"} target="_blank" rel="nofollow noopener noreferrer">here</a>.
