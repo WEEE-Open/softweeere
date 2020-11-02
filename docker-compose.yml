@@ -1,0 +1,10 @@
+version: "3.8"
+services:
+  client:
+    build: client
+    ports:
+      - "80:80"
+  server:
+    build: server
+    ports:
+      - "7337:80"
