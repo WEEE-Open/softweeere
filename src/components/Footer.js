@@ -8,7 +8,7 @@ const Footer = props => {
                 className={"bottom mt-5 flex-column"}
             >
                 <p className={"flex-row"}>
-                    Contribute or clone this website <a href="https://github.com/e-caste/softweeere" target="_blank" rel="nofollow noopener noreferrer">here</a>!
+                    Contribute or clone this website <a href="https://github.com/weee-open/softweeere" target="_blank" rel="nofollow noopener noreferrer">here</a>!
                 </p>
                 <p className={"flex-row text-center"}>
                     Follow us on
