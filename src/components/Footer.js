@@ -10,7 +10,7 @@ const Footer = props => {
                 <p className={"flex-row"}>
                     Contribute or clone this website <a href="https://github.com/e-caste/softweeere" target="_blank" rel="nofollow noopener noreferrer">here</a>!
                 </p>
-                <p className={"flex-row"}>
+                <p className={"flex-row text-center"}>
                     Follow us on Facebook:
                     <a href="https://www.facebook.com/weeeopen/" target="_blank" rel="nofollow noopener noreferrer"> Team WEEE Open</a>
                     , Instagram:
