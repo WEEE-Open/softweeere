@@ -12,6 +12,8 @@ const Footer = props => {
                 </p>
                 <p className={"flex-row text-center"}>
                     Follow us on
+                    <a href="http://weeeopen.polito.it" target="_blank" rel="nofollow noopener noreferrer"> our website</a>
+                    ,
                     <a href="https://www.facebook.com/weeeopen/" target="_blank" rel="nofollow noopener noreferrer"> Facebook</a>
                     ,
                     <a href="https://www.instagram.com/weeeopen/" target="_blank" rel="nofollow noopener noreferrer"> Instagram</a>
