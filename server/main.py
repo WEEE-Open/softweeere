@@ -4,7 +4,7 @@
 from fastapi import FastAPI, Request, Cookie, Depends
 from fastapi.security import APIKeyCookie
 from fastapi.responses import Response, StreamingResponse
-from pydantic import BaseModel, UUID4, validator
+from pydantic import BaseModel, EmailStr, UUID4, validator
 import uuid
 from jose import jwt
 from fastapi_users import FastAPIUsers, models
@@ -16,9 +16,12 @@ from docker.errors import DockerException, APIError
 
 from enum import Enum
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 import random
 from sys import stderr
+
+
+cookie_lifetime = 3600  # seconds
 
 
 # an enum class which contains the Docker container names of our repos
@@ -35,11 +38,15 @@ class Container(BaseModel):
 
 
 class User(models.BaseUser):
-    pass
+    container_ids: List[str] = []
+    expire_unix: int = int(datetime.utcnow().timestamp()) + cookie_lifetime
 
 
 class UserCreate(models.BaseUserCreate):
     pass
+    # TODO: use random email as userid in frontend, can't override here in backend
+    # email: EmailStr = f"{get_random_string()}@example.com"
+    # password: str = "softweeere"
 
 
 class UserUpdate(User, models.BaseUserUpdate):
@@ -56,7 +63,7 @@ def get_random_string(length: int = 64):
 
 
 def on_after_register(user: UserDB, request: Request):
-    print(f"User {user.id} has registered.")
+    print(f"User {user.email} has registered.")
 
 
 def get_running_container(repo: str):
@@ -75,7 +82,7 @@ secret_key = "secret"
 cookie_name = "softweeere"
 cookie_authentication = CookieAuthentication(
     secret=secret_key,
-    lifetime_seconds=3600,
+    lifetime_seconds=cookie_lifetime,
     cookie_name=cookie_name,
 )
 
@@ -91,7 +98,6 @@ fastapi_users = FastAPIUsers(
     UserUpdate,
     UserDB,
 )
-
 
 api_prefix = "/api"
 app = FastAPI()
