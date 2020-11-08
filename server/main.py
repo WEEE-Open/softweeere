@@ -39,7 +39,6 @@ class Container(BaseModel):
 class User(models.BaseUser):
     container_ids: List[str] = []
     expire_unix: int = int(datetime.utcnow().timestamp()) + cookie_lifetime
-    # TODO: replace user with new one if expire_unix > int(datetime.utcnow().timestamp())
 
 
 class UserCreate(models.BaseUserCreate):
@@ -75,6 +74,17 @@ def get_running_container(repo: str):
         }
     except APIError:
         raise
+
+
+async def get_old_or_new_user(user_email: EmailStr):
+    user = await user_db.get_by_email(user_email)
+    if user:
+        now = int(datetime.utcnow().timestamp())
+        if user.expire_unix > now:
+            user.container_ids = []
+            user.expire_unix = int(datetime.utcnow().timestamp()) + cookie_lifetime
+            await user_db.update(user)
+    return user
 
 
 secret_key = "secret"
@@ -122,7 +132,7 @@ async def root():
 
 @app.get(api_prefix + "/container/{repo}")
 async def get_container(repo: Repository, user_email: EmailStr):
-    user = await user_db.get_by_email(user_email)
+    user = await get_old_or_new_user(user_email)
     if not user:
         return {"error": f"user {user_email} not found"}
     try:
@@ -137,7 +147,7 @@ async def get_container(repo: Repository, user_email: EmailStr):
 
 @app.get(api_prefix + "/stream/{repo}")
 async def get_container_stream(cnt_id: str, user_email: EmailStr):
-    user = await user_db.get_by_email(user_email)
+    user = await get_old_or_new_user(user_email)
     if not user:
         return {"error": f"user {user_email} not found"}
     if cnt_id not in user.container_ids:
@@ -153,7 +163,7 @@ async def get_container_stream(cnt_id: str, user_email: EmailStr):
 
 @app.delete(api_prefix + "/container/{repo}")
 async def delete_container(cnt_id: str, user_email: EmailStr):
-    user = await user_db.get_by_email(user_email)
+    user = await get_old_or_new_user(user_email)
     if not user:
         return {"error": f"user {user_email} not found"}
     try:
