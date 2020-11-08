@@ -26,9 +26,9 @@ cookie_lifetime = 3600  # seconds
 
 # an enum class which contains the Docker container names of our repos
 class Repository(str, Enum):
-    alpine = "alpine"
-    # weeehire_ng = "weeehire-ng_nginx"
-    # TODO: add peracotta and sardina
+    peracotta = "peracotta"
+    sardina = "sardina"
+    weeehire_ng = "weeehire-ng_nginx"
 
 
 # a class to represent a running container
@@ -124,7 +124,7 @@ async def root():
 async def get_container(repo: Repository):
     try:
         cnt = get_running_container(repo)
-        return {"id": cnt['id']}
+        return cnt
     except APIError:
         return {"repo": repo, "error": "Cannot instantiate Docker container"}
 
