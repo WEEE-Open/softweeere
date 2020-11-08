@@ -145,8 +145,10 @@ async def get_container_stream(cnt_id: str, user_email: EmailStr):
     try:
         cnt = client.containers.get(cnt_id)
         return StreamingResponse(cnt.attach(stdout=True, stderr=True, stream=True, demux=False))
+    except NotFound:
+        return {"error": f"Container {cnt_id} does not exist"}
     except APIError:
-        return {"error": "Cannot instantiate stream to container"}
+        return {"error": f"Cannot instantiate stream to container {cnt_id} for user {user_email}"}
 
 
 @app.delete(api_prefix + "/container/{repo}")
