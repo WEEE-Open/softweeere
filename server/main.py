@@ -166,6 +166,8 @@ async def delete_container(cnt_id: str, user_email: EmailStr):
     user = await get_old_or_new_user(user_email)
     if not user:
         return {"error": f"user {user_email} not found"}
+    if cnt_id not in user.container_ids:
+        return {"error": f"container {cnt_id} does not belong to user {user_email}"}
     try:
         try:
             cnt = client.containers.get(cnt_id)
