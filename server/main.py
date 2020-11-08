@@ -121,10 +121,16 @@ async def root():
 
 
 @app.get(api_prefix + "/container/{repo}")
-async def get_container(repo: Repository):
+async def get_container(repo: Repository, user_email: EmailStr):
+    user = await user_db.get_by_email(user_email)
+    if not user:
+        return {"error": f"user {user_email} not found"}
     try:
         cnt = get_running_container(repo)
-        return cnt
+        # add container id to user's container_ids list
+        user.container_ids.append(cnt['id'])
+        await user_db.update(user)
+        return {"repo": repo, "user": user_email, "cnt_id": cnt['id']}
     except APIError:
         return {"repo": repo, "error": "Cannot instantiate Docker container"}
 
