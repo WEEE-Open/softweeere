@@ -65,7 +65,7 @@ def on_after_register(user: UserDB, request: Request):
     print(f"User {user.email} has registered.")
 
 
-def get_running_container(repo: str):
+async def get_running_container(repo: str):
     try:
         cnt = client.containers.run(repo, auto_remove=True, detach=True)
         return {
@@ -151,7 +151,7 @@ async def get_container(repo: Repository, user_email: EmailStr):
     if not user:
         return {"error": f"user {user_email} not found"}
     try:
-        cnt = get_running_container(repo)
+        cnt = await get_running_container(repo)
         # add container id to user's container_ids list
         user.container_ids.append(cnt['id'])
         await user_db.update(user)
