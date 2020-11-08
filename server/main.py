@@ -72,7 +72,6 @@ def get_running_container(repo: str):
         return {
             "repo": repo,
             "id": cnt.id,
-            "output": cnt.attach(stdout=True, stderr=True, stream=True, demux=False),
         }
     except APIError:
         raise
@@ -125,9 +124,18 @@ async def root():
 async def get_container(repo: Repository):
     try:
         cnt = get_running_container(repo)
-        return StreamingResponse(cnt['output'])
+        return {"id": cnt['id']}
     except APIError:
         return {"repo": repo, "error": "Cannot instantiate Docker container"}
+
+
+@app.get(api_prefix + "/stream/{repo}")
+async def get_container_stream(cnt_id: str):
+    try:
+        cnt = client.containers.get(cnt_id)
+        return StreamingResponse(cnt.attach(stdout=True, stderr=True, stream=True, demux=False))
+    except APIError:
+        return {"error": "Cannot instantiate stream to container"}
 
 
 @app.delete(api_prefix + "/container/{repo}")
