@@ -80,6 +80,7 @@ async def remove_container(cnt_id: str):
     try:
         cnt = client.containers.get(cnt_id)
         cnt.stop()
+        # cnt.remove()  # not needed if auto_remove=True
     except Exception:
         pass
 
@@ -193,7 +194,6 @@ async def delete_container(cnt_id: str, user_email: EmailStr):
         # remove container id from user's container_ids list
         user.container_ids.remove(cnt_id)
         await user_db.update(user)
-        # cnt.remove()  # not needed if auto_remove=True
         return {"user": user_email, "cnt_id": cnt_id}
     except NotFound:
         return {"error": f"Container {cnt_id} does not exist"}
