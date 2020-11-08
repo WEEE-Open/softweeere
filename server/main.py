@@ -34,7 +34,7 @@ class Repository(str, Enum):
 # a class to represent a running container
 class Container(BaseModel):
     cnt_id: str
-    user_id: str
+    user_email: EmailStr
 
 
 class User(models.BaseUser):
