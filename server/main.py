@@ -113,7 +113,7 @@ app = FastAPI()
 app.include_router(fastapi_users.get_register_router(on_after_register),
                    prefix=f"{api_prefix}/auth", tags=["auth"])
 app.include_router(fastapi_users.get_auth_router(cookie_authentication),
-                   prefix=f"{api_prefix}/auth/cookie", tags=["auth"])
+                   prefix=f"{api_prefix}/auth", tags=["auth"])
 app.include_router(fastapi_users.get_users_router(),
                    prefix=f"{api_prefix}/users", tags=["users"])
 
