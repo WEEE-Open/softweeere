@@ -80,7 +80,7 @@ async def get_old_or_new_user(user_email: EmailStr):
     user = await user_db.get_by_email(user_email)
     if user:
         now = int(datetime.utcnow().timestamp())
-        if user.expire_unix > now:
+        if user.expire_unix < now:
             user.container_ids = []
             user.expire_unix = int(datetime.utcnow().timestamp()) + cookie_lifetime
             await user_db.update(user)
