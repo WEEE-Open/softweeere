@@ -1,12 +1,9 @@
 # run with uvicorn main:app --reload
 # deploy with ?
 
-from fastapi import FastAPI, Request, Cookie, Depends
-from fastapi.security import APIKeyCookie
-from fastapi.responses import Response, StreamingResponse
-from pydantic import BaseModel, EmailStr, UUID4, validator
-import uuid
-from jose import jwt
+from fastapi import FastAPI, Request
+from fastapi.responses import StreamingResponse
+from pydantic import BaseModel, EmailStr
 from fastapi_users import FastAPIUsers, models
 from fastapi_users.authentication import CookieAuthentication
 from fastapi_users.db import MongoDBUserDatabase
@@ -17,7 +14,7 @@ from requests.exceptions import ChunkedEncodingError
 
 from enum import Enum
 from datetime import datetime
-from typing import List, Optional
+from typing import List
 import random
 from sys import stderr
 
