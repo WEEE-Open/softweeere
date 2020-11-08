@@ -189,7 +189,7 @@ async def delete_container(cnt_id: str, user_email: EmailStr):
         # TODO: understand why this exception is raised
         except ChunkedEncodingError:
             return {"error": f"Container {cnt_id} does not exist"}
-        cnt.stop()
+        await remove_container(cnt_id)
         # remove container id from user's container_ids list
         user.container_ids.remove(cnt_id)
         await user_db.update(user)
