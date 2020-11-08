@@ -12,7 +12,7 @@ from fastapi_users.authentication import CookieAuthentication
 from fastapi_users.db import MongoDBUserDatabase
 import motor.motor_asyncio
 import docker
-from docker.errors import DockerException, APIError
+from docker.errors import DockerException, APIError, NotFound
 
 from enum import Enum
 from datetime import datetime
@@ -150,14 +150,19 @@ async def get_container_stream(cnt_id: str, user_email: EmailStr):
 
 
 @app.delete(api_prefix + "/container/{repo}")
-async def delete_container(repo: Repository, cnt: Container):
-    container = client.containers.get(cnt.cnt_id)
-    if cnt:
-        container.stop()
-        container.remove()
-        return {"repo": repo, "container": cnt}
-    else:
-        return {"repo": repo, "error": f"Container {cnt.cnt_id} does not exist"}
+async def delete_container(cnt_id: str, user_email: EmailStr):
+    user = await user_db.get_by_email(user_email)
+    if not user:
+        return {"error": f"user {user_email} not found"}
+    try:
+        cnt = client.containers.get(cnt_id)
+        cnt.stop()
+        # cnt.remove()  # not needed if auto_remove=True
+        return {"user": user_email, "cnt_id": cnt_id}
+    except NotFound:
+        return {"error": f"Container {cnt_id} does not exist"}
+    except APIError:
+        return {"error": f"Cannot stop container {cnt_id} for user {user_email}"}
 
 
 
