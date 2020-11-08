@@ -154,6 +154,7 @@ async def get_container_stream(cnt_id: str, user_email: EmailStr):
         return {"error": f"container {cnt_id} does not belong to user {user_email}"}
     try:
         cnt = client.containers.get(cnt_id)
+        # TODO: find out needed method for Xterm.js between attach or attach_socket
         return StreamingResponse(cnt.attach(stdout=True, stderr=True, stream=True, demux=False))
     except NotFound:
         return {"error": f"Container {cnt_id} does not exist"}
