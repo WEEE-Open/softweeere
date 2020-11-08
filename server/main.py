@@ -13,6 +13,7 @@ from fastapi_users.db import MongoDBUserDatabase
 import motor.motor_asyncio
 import docker
 from docker.errors import DockerException, APIError, NotFound
+from requests.exceptions import ChunkedEncodingError
 
 from enum import Enum
 from datetime import datetime
@@ -157,8 +158,15 @@ async def delete_container(cnt_id: str, user_email: EmailStr):
     if not user:
         return {"error": f"user {user_email} not found"}
     try:
-        cnt = client.containers.get(cnt_id)
+        try:
+            cnt = client.containers.get(cnt_id)
+        # TODO: understand why this exception is raised
+        except ChunkedEncodingError:
+            return {"error": f"Container {cnt_id} does not exist"}
         cnt.stop()
+        # remove container id from user's container_ids list
+        user.container_ids.remove(cnt_id)
+        await user_db.update(user)
         # cnt.remove()  # not needed if auto_remove=True
         return {"user": user_email, "cnt_id": cnt_id}
     except NotFound:
