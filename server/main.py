@@ -27,6 +27,7 @@ class Repository(str, Enum):
     peracotta = "peracotta"
     sardina = "sardina"
     weeehire_ng = "weeehire-ng_nginx"
+    # TODO: support custom docker registry
 
 
 # a class to represent a running container
@@ -38,6 +39,7 @@ class Container(BaseModel):
 class User(models.BaseUser):
     container_ids: List[str] = []
     expire_unix: int = int(datetime.utcnow().timestamp()) + cookie_lifetime
+    # TODO: replace user with new one if expire_unix > int(datetime.utcnow().timestamp())
 
 
 class UserCreate(models.BaseUserCreate):
