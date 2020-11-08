@@ -76,11 +76,25 @@ def get_running_container(repo: str):
         raise
 
 
+async def remove_container(cnt_id: str):
+    try:
+        cnt = client.containers.get(cnt_id)
+        cnt.stop()
+    except Exception:
+        pass
+
+
+async def remove_user_containers(container_ids: List[str]):
+    for cnt_id in container_ids:
+        await remove_container(cnt_id)
+
+
 async def get_old_or_new_user(user_email: EmailStr):
     user = await user_db.get_by_email(user_email)
     if user:
         now = int(datetime.utcnow().timestamp())
         if user.expire_unix < now:
+            await remove_user_containers(user.container_ids)
             user.container_ids = []
             user.expire_unix = int(datetime.utcnow().timestamp()) + cookie_lifetime
             await user_db.update(user)
