@@ -169,17 +169,22 @@ async def get_container(repo: Repository, user_email: EmailStr):
 async def get_container_stream(cnt_id: str, repo: Repository, user_email: EmailStr):
     user = await get_old_or_new_user(user_email)
     if not user:
-        return {"error": f"user {user_email} not found"}
+        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND,
+                            content={"error": f"user {user_email} not found"})
     if repo not in user.container_ids or cnt_id != user.container_ids[repo]:
-        return {"error": f"container {cnt_id} does not belong to user {user_email}"}
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,
+                            content={"error": f"container {cnt_id} does not belong to user {user_email}"})
     try:
         cnt = client.containers.get(cnt_id)
         # TODO: find out needed method for Xterm.js between attach or attach_socket
-        return StreamingResponse(cnt.attach(stdout=True, stderr=True, stream=True, demux=False))
+        return StreamingResponse(status_code=status.HTTP_200_OK,
+                                 content=cnt.attach(stdout=True, stderr=True, stream=True, demux=False))
     except NotFound:
-        return {"error": f"Container {cnt_id} does not exist"}
+        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND,
+                            content={"error": f"Container {cnt_id} does not exist"})
     except APIError:
-        return {"error": f"Cannot instantiate stream to container {cnt_id} for user {user_email}"}
+        return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            content={"error": f"Cannot instantiate stream to container {cnt_id} for user {user_email}"})
 
 
 @app.delete(api_prefix + "/container/{repo}")
