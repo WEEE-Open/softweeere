@@ -7,7 +7,7 @@ const password = "softweeere";
 
 const getRandomString = () => uuid.v4();
 
-
+// TODO: update response handling with new HTTP status codes in all APIs
 async function register() {
     return new Promise(((resolve, reject) => {
         const email = `${getRandomString()}@example.com`;
@@ -51,10 +51,28 @@ async function isLoggedIn() {
                     resolve(true);
                 else
                     resolve(false);
-            })
-            .catch(err => reject(err));
+            }).catch(err => reject(err));
     }));
 }
 
-const API = {register, login, isLoggedIn};
+async function getContainer(email, repo) {
+    return new Promise(((resolve, reject) => {
+        fetch(`${apiPrefix}/container/${repo}`, {
+            method: "GET",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({email: email})
+        }).then(res => {
+            if (res.ok || res.status === 201)
+                resolve(res.json());
+            else if (res.status === 401)
+                reject("Unauthorized");
+            else if (res.status === 422)
+                reject("Validation error");
+            else if (res.status === 500)
+                reject("Internal server error");
+        }).catch(err => reject(err));
+    }));
+}
+
+const API = {register, login, isLoggedIn, getContainer};
 export default API;
