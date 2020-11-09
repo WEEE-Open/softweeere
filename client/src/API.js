@@ -29,7 +29,7 @@ async function login(email) {
         fetch(`${apiPrefix}/auth/login`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({email: email, password: password})
+            body: JSON.stringify({username: email, password: password})
         }).then(res => {
             if (res.ok)
                 resolve(null);
@@ -56,7 +56,7 @@ async function getRepos(email) {
         fetch(`${apiPrefix}/repos`, {
             method: "GET",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({email: email})
+            body: JSON.stringify({user_email: email})
         }).then(res => {
             if (res.ok)
                 resolve(res.json());
@@ -71,7 +71,7 @@ async function getContainer(email, repo) {
         fetch(`${apiPrefix}/container/${repo}`, {
             method: "GET",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({email: email})
+            body: JSON.stringify({user_email: email})
         }).then(res => {
             if (res.ok || res.status === 201)
                 resolve(res.json());
@@ -86,7 +86,7 @@ async function deleteContainer(email, repo, cnt_id) {
         fetch(`${apiPrefix}/container/${repo}`, {
             method: "DELETE",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({email: email, cnt_id: cnt_id})
+            body: JSON.stringify({user_email: email, cnt_id: cnt_id})
         }).then(res => {
             if (res.ok)
                 resolve(res.json());
