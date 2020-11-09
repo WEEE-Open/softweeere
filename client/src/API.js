@@ -1,11 +1,11 @@
-import uuid from "uuid";
+import {v4 as uuid} from "uuid";
 
 const apiPrefix = "/api";
 // the password is global for every user, since authentication is purely based
 // on randomly generated fake email addresses
 const password = "softweeere";
 
-const getRandomString = () => uuid.v4();
+const getRandomString = () => uuid();
 
 
 async function register() {
