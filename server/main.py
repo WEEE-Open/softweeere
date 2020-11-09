@@ -138,7 +138,11 @@ async def root():
 
 
 @app.get(api_prefix + "/repos")
-async def get_repos():
+async def get_repos(user_email: EmailStr):
+    user = await get_old_or_new_user(user_email)
+    if not user:
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,
+                            content={"error": f"user {user_email} not found"})
     try:
         return JSONResponse(status_code=status.HTTP_200_OK,
                             content=[repo.value for repo in Repository])
