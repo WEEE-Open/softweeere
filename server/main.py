@@ -15,7 +15,6 @@ from requests.exceptions import ChunkedEncodingError
 from enum import Enum
 from datetime import datetime
 from typing import Dict
-import random
 from sys import stderr
 
 
@@ -52,11 +51,6 @@ class UserUpdate(User, models.BaseUserUpdate):
 
 class UserDB(User, models.BaseUserDB):
     pass
-
-
-def get_random_string(length: int = 64):
-    return ''.join(random.choice("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUWXYZ1234567890'_-/,;.:àèìòù")
-                   for _ in range(length))
 
 
 def on_after_register(user: UserDB, request: Request):
