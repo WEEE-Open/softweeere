@@ -16,10 +16,10 @@ async function register() {
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({email: email, password: password})
         }).then(res => {
-                if (res.ok)
-                    resolve(res.json());
-                else
-                    reject(res.json().error);
+            if (res.ok)
+                resolve(res.json());
+            else
+                reject(res.json().error);
         }).catch(err => reject(err));
     }));
 }
