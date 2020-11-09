@@ -15,13 +15,22 @@ const MainView = props => {
 
     // componentDidMount
     useEffect(() => {
-        API.register().then(json => {
-            const newOrOldUser = User.from(json);
-            API.login(newOrOldUser.email)
-                .then(res => setLoggedIn(res === null))
-                .catch(err => console.log(err));
-            setUser(newOrOldUser);
-        });
+        API.getCurrentUser()
+            .then(oldUser => {
+                if (oldUser === null) {
+                    API.register()
+                        .then(json => {
+                            const newOrOldUser = User.from(json);
+                            API.login(newOrOldUser.email)
+                                .then(res => setLoggedIn(res === null))
+                                .catch(err => console.log(err));
+                            setUser(newOrOldUser);
+                    });
+                } else {
+                    setUser(User.from(oldUser));
+                    setLoggedIn(true);
+                }
+            });
     }, []);
 
     const scrollToBottom = () => {
