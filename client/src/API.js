@@ -69,7 +69,7 @@ async function getCurrentUser() {
 async function getRepos(email) {
     return new Promise(((resolve, reject) => {
         fetch(`${apiPrefix}/repos`, {
-            method: "GET",
+            method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({user_email: email})
         }).then(res => {
@@ -84,7 +84,7 @@ async function getRepos(email) {
 async function getContainer(email, repo) {
     return new Promise(((resolve, reject) => {
         fetch(`${apiPrefix}/container/${repo}`, {
-            method: "GET",
+            method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({user_email: email})
         }).then(res => {
