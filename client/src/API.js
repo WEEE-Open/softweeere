@@ -26,10 +26,13 @@ async function register() {
 
 async function login(email) {
     return new Promise(((resolve, reject) => {
+        // see https://stackoverflow.com/a/37562814
+        const details = {username: email, password: password}
+        const body = Object.keys(details).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(details[key])}`).join('&');
         fetch(`${apiPrefix}/auth/login`, {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({username: email, password: password})
+            headers: {"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"},
+            body: body
         }).then(res => {
             if (res.ok)
                 resolve(null);
