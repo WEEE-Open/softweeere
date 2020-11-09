@@ -14,7 +14,7 @@ from requests.exceptions import ChunkedEncodingError
 
 from enum import Enum
 from datetime import datetime
-from typing import List
+from typing import Dict
 import random
 from sys import stderr
 
@@ -37,15 +37,13 @@ class Container(BaseModel):
 
 
 class User(models.BaseUser):
-    container_ids: List[str] = []
+    container_ids: Dict[str, str] = {}
     expire_unix: int = int(datetime.utcnow().timestamp()) + cookie_lifetime
 
 
 class UserCreate(models.BaseUserCreate):
     pass
     # TODO: use random email as userid in frontend, can't override here in backend
-    # email: EmailStr = f"{get_random_string()}@example.com"
-    # password: str = "softweeere"
 
 
 class UserUpdate(User, models.BaseUserUpdate):
@@ -85,9 +83,9 @@ async def remove_container(cnt_id: str):
         pass
 
 
-async def remove_user_containers(container_ids: List[str]):
-    for cnt_id in container_ids:
-        await remove_container(cnt_id)
+async def remove_user_containers(container_ids: Dict[str, str]):
+    for repo in container_ids:
+        await remove_container(container_ids[repo])
 
 
 async def get_old_or_new_user(user_email: EmailStr):
@@ -96,7 +94,7 @@ async def get_old_or_new_user(user_email: EmailStr):
         now = int(datetime.utcnow().timestamp())
         if user.expire_unix < now:
             await remove_user_containers(user.container_ids)
-            user.container_ids = []
+            user.container_ids = {}
             user.expire_unix = int(datetime.utcnow().timestamp()) + cookie_lifetime
             await user_db.update(user)
     return user
@@ -151,9 +149,12 @@ async def get_container(repo: Repository, user_email: EmailStr):
     if not user:
         return {"error": f"user {user_email} not found"}
     try:
+        # check if user already has container of given repo
+        if repo in user.container_ids:
+            return {"repo": repo, "user": user_email, "cnt_id": user.container_ids[repo]}
         cnt = await get_running_container(repo)
-        # add container id to user's container_ids list
-        user.container_ids.append(cnt['id'])
+        # add container id to user's container_ids dict
+        user.container_ids[repo] = cnt['id']
         await user_db.update(user)
         return {"repo": repo, "user": user_email, "cnt_id": cnt['id']}
     except APIError:
@@ -161,11 +162,11 @@ async def get_container(repo: Repository, user_email: EmailStr):
 
 
 @app.get(api_prefix + "/stream/{repo}")
-async def get_container_stream(cnt_id: str, user_email: EmailStr):
+async def get_container_stream(cnt_id: str, repo: Repository, user_email: EmailStr):
     user = await get_old_or_new_user(user_email)
     if not user:
         return {"error": f"user {user_email} not found"}
-    if cnt_id not in user.container_ids:
+    if repo not in user.container_ids or cnt_id != user.container_ids[repo]:
         return {"error": f"container {cnt_id} does not belong to user {user_email}"}
     try:
         cnt = client.containers.get(cnt_id)
@@ -178,21 +179,21 @@ async def get_container_stream(cnt_id: str, user_email: EmailStr):
 
 
 @app.delete(api_prefix + "/container/{repo}")
-async def delete_container(cnt_id: str, user_email: EmailStr):
+async def delete_container(cnt_id: str, repo: Repository, user_email: EmailStr):
     user = await get_old_or_new_user(user_email)
     if not user:
         return {"error": f"user {user_email} not found"}
-    if cnt_id not in user.container_ids:
+    if repo not in user.container_ids or cnt_id != user.container_ids[repo]:
         return {"error": f"container {cnt_id} does not belong to user {user_email}"}
     try:
         try:
-            cnt = client.containers.get(cnt_id)
+            _ = client.containers.get(cnt_id)
         # TODO: understand why this exception is raised
         except ChunkedEncodingError:
             return {"error": f"Container {cnt_id} does not exist"}
         await remove_container(cnt_id)
-        # remove container id from user's container_ids list
-        user.container_ids.remove(cnt_id)
+        # remove repo from user's container_ids dict
+        del user.container_ids[repo]
         await user_db.update(user)
         return {"user": user_email, "cnt_id": cnt_id}
     except NotFound:
@@ -201,4 +202,5 @@ async def delete_container(cnt_id: str, user_email: EmailStr):
         return {"error": f"Cannot stop container {cnt_id} for user {user_email}"}
 
 
+# TODO: add get_repos
 
