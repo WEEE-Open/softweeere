@@ -81,5 +81,20 @@ async function getContainer(email, repo) {
     }));
 }
 
-const API = {register, login, isLoggedIn, getRepos, getContainer};
+async function deleteContainer(email, repo, cnt_id) {
+    return new Promise(((resolve, reject) => {
+        fetch(`${apiPrefix}/container/${repo}`, {
+            method: "DELETE",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({email: email, cnt_id: cnt_id})
+        }).then(res => {
+            if (res.ok)
+                resolve(res.json());
+            else
+                reject(res.json().error);
+        }).catch(err => reject(err));
+    }));
+}
+
+const API = {register, login, isLoggedIn, getRepos, getContainer, deleteContainer};
 export default API;
