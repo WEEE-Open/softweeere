@@ -30,9 +30,16 @@ async function register() {
 
 async function isLoggedIn() {
     return new Promise(((resolve, reject) => {
-
+        fetch(`${apiPrefix}/users/me`)
+            .then(res => {
+                if (res.ok)
+                    resolve(true);
+                else
+                    resolve(false);
+            })
+            .catch(err => reject(err));
     }));
 }
 
-const API = {register};
+const API = {register, isLoggedIn};
 export default API;
