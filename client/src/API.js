@@ -7,7 +7,7 @@ const password = "softweeere";
 
 const getRandomString = () => uuid.v4();
 
-// TODO: update response handling with new HTTP status codes in all APIs
+
 async function register() {
     return new Promise(((resolve, reject) => {
         const email = `${getRandomString()}@example.com`;
