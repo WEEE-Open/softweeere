@@ -18,10 +18,8 @@ async function register() {
         }).then(res => {
                 if (res.ok)
                     resolve(res.json());
-                else if (res.status === 400)
-                    reject(`User ${email} already registered`)
-                else if (res.status === 422)
-                    reject("Validation error")
+                else
+                    reject(res.json().error);
         }).catch(err => reject(err));
     }));
 }
@@ -35,10 +33,8 @@ async function login(email) {
         }).then(res => {
             if (res.ok)
                 resolve(null);
-            else if (res.status === 400)
-                reject("Wrong email or password")
-            else if (res.status === 422)
-                reject("Validation error")
+            else
+                reject(res.json().error);
         }).catch(err => reject(err));
     }));
 }
@@ -64,12 +60,8 @@ async function getContainer(email, repo) {
         }).then(res => {
             if (res.ok || res.status === 201)
                 resolve(res.json());
-            else if (res.status === 401)
-                reject("Unauthorized");
-            else if (res.status === 422)
-                reject("Validation error");
-            else if (res.status === 500)
-                reject("Internal server error");
+            else
+                reject(res.json().error);
         }).catch(err => reject(err));
     }));
 }
