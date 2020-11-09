@@ -1,8 +1,8 @@
 # run with uvicorn main:app --reload
 # deploy with ?
 
-from fastapi import FastAPI, Request
-from fastapi.responses import StreamingResponse
+from fastapi import FastAPI, Request, status
+from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, EmailStr
 from fastapi_users import FastAPIUsers, models
 from fastapi_users.authentication import CookieAuthentication
@@ -147,18 +147,22 @@ async def root():
 async def get_container(repo: Repository, user_email: EmailStr):
     user = await get_old_or_new_user(user_email)
     if not user:
-        return {"error": f"user {user_email} not found"}
+        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND,
+                            content={"error": f"user {user_email} not found"})
     try:
         # check if user already has container of given repo
         if repo in user.container_ids:
-            return {"repo": repo, "user": user_email, "cnt_id": user.container_ids[repo]}
+            return JSONResponse(status_code=status.HTTP_200_OK,
+                                content={"repo": repo, "user": user_email, "cnt_id": user.container_ids[repo]})
         cnt = await get_running_container(repo)
         # add container id to user's container_ids dict
         user.container_ids[repo] = cnt['id']
         await user_db.update(user)
-        return {"repo": repo, "user": user_email, "cnt_id": cnt['id']}
+        return JSONResponse(status_code=status.HTTP_201_CREATED,
+                            content={"repo": repo, "user": user_email, "cnt_id": cnt['id']})
     except APIError:
-        return {"repo": repo, "error": "Cannot instantiate Docker container"}
+        return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            content={"repo": repo, "error": "Cannot instantiate Docker container"})
 
 
 @app.get(api_prefix + "/stream/{repo}")
