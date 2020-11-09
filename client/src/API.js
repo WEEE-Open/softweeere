@@ -54,6 +54,18 @@ async function isLoggedIn() {
     }));
 }
 
+async function getCurrentUser() {
+    return new Promise(((resolve, reject) => {
+        fetch(`${apiPrefix}/users/me`)
+            .then(res => {
+                if (res.ok)
+                    resolve(res.json());
+                else
+                    resolve(null);
+            }).catch(err => reject(err));
+    }));
+}
+
 async function getRepos(email) {
     return new Promise(((resolve, reject) => {
         fetch(`${apiPrefix}/repos`, {
@@ -99,5 +111,5 @@ async function deleteContainer(email, repo, cnt_id) {
     }));
 }
 
-const API = {register, login, isLoggedIn, getRepos, getContainer, deleteContainer};
+const API = {register, login, isLoggedIn, getCurrentUser, getRepos, getContainer, deleteContainer};
 export default API;
