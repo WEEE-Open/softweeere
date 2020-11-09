@@ -155,7 +155,7 @@ async def get_repos(user_email: EmailStr):
 async def get_container(repo: Repository, user_email: EmailStr):
     user = await get_old_or_new_user(user_email)
     if not user:
-        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND,
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,
                             content={"error": f"user {user_email} not found"})
     try:
         # check if user already has container of given repo
@@ -177,7 +177,7 @@ async def get_container(repo: Repository, user_email: EmailStr):
 async def get_container_stream(cnt_id: str, repo: Repository, user_email: EmailStr):
     user = await get_old_or_new_user(user_email)
     if not user:
-        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND,
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,
                             content={"error": f"user {user_email} not found"})
     if repo not in user.container_ids or cnt_id != user.container_ids[repo]:
         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,
@@ -199,7 +199,7 @@ async def get_container_stream(cnt_id: str, repo: Repository, user_email: EmailS
 async def delete_container(cnt_id: str, repo: Repository, user_email: EmailStr):
     user = await get_old_or_new_user(user_email)
     if not user:
-        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND,
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,
                             content={"error": f"user {user_email} not found"})
     if repo not in user.container_ids or cnt_id != user.container_ids[repo]:
         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,
