@@ -51,6 +51,21 @@ async function isLoggedIn() {
     }));
 }
 
+async function getRepos(email) {
+    return new Promise(((resolve, reject) => {
+        fetch(`${apiPrefix}/repos`, {
+            method: "GET",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({email: email})
+        }).then(res => {
+            if (res.ok)
+                resolve(res.json());
+            else
+                reject(res.json().error);
+        }).catch(err => reject(err));
+    }));
+}
+
 async function getContainer(email, repo) {
     return new Promise(((resolve, reject) => {
         fetch(`${apiPrefix}/container/${repo}`, {
@@ -66,5 +81,5 @@ async function getContainer(email, repo) {
     }));
 }
 
-const API = {register, login, isLoggedIn, getContainer};
+const API = {register, login, isLoggedIn, getRepos, getContainer};
 export default API;
