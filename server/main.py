@@ -137,7 +137,7 @@ async def root():
     return {"message": "Server is running correctly"}
 
 
-@app.get(api_prefix + "/repos")
+@app.post(api_prefix + "/repos")
 async def get_repos(user_email: EmailStr):
     user = await get_old_or_new_user(user_email)
     if not user:
@@ -151,7 +151,7 @@ async def get_repos(user_email: EmailStr):
                             content={"error": "Cannot get available repositories"})
 
 
-@app.get(api_prefix + "/container/{repo}")
+@app.post(api_prefix + "/container/{repo}")
 async def get_container(repo: Repository, user_email: EmailStr):
     user = await get_old_or_new_user(user_email)
     if not user:
@@ -173,7 +173,7 @@ async def get_container(repo: Repository, user_email: EmailStr):
                             content={"repo": repo, "error": "Cannot instantiate Docker container"})
 
 
-@app.get(api_prefix + "/stream/{repo}")
+@app.post(api_prefix + "/stream/{repo}")
 async def get_container_stream(cnt_id: str, repo: Repository, user_email: EmailStr):
     user = await get_old_or_new_user(user_email)
     if not user:
