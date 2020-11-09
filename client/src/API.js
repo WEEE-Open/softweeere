@@ -19,7 +19,7 @@ async function register() {
             if (res.ok)
                 resolve(res.json());
             else
-                reject(res.json().error);
+                reject(res.json());
         }).catch(err => reject(err));
     }));
 }
@@ -34,7 +34,7 @@ async function login(email) {
             if (res.ok)
                 resolve(null);
             else
-                reject(res.json().error);
+                reject(res.json());
         }).catch(err => reject(err));
     }));
 }
