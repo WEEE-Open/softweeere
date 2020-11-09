@@ -109,7 +109,7 @@ cookie_authentication = CookieAuthentication(
 )
 
 db_url = "mongodb://localhost:27017"
-db = motor.motor_asyncio.AsyncIOMotorClient(db_url, uuidRepresentation="standard")['softweeere_users']
+db = motor.motor_asyncio.AsyncIOMotorClient(db_url, uuidRepresentation="standard")['softweeere']
 collection = db["users"]
 user_db = MongoDBUserDatabase(UserDB, collection)
 fastapi_users = FastAPIUsers(
