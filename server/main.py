@@ -191,24 +191,30 @@ async def get_container_stream(cnt_id: str, repo: Repository, user_email: EmailS
 async def delete_container(cnt_id: str, repo: Repository, user_email: EmailStr):
     user = await get_old_or_new_user(user_email)
     if not user:
-        return {"error": f"user {user_email} not found"}
+        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND,
+                            content={"error": f"user {user_email} not found"})
     if repo not in user.container_ids or cnt_id != user.container_ids[repo]:
-        return {"error": f"container {cnt_id} does not belong to user {user_email}"}
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,
+                            content={"error": f"container {cnt_id} does not belong to user {user_email}"})
     try:
         try:
             _ = client.containers.get(cnt_id)
         # TODO: understand why this exception is raised
         except ChunkedEncodingError:
-            return {"error": f"Container {cnt_id} does not exist"}
+            return JSONResponse(status_code=status.HTTP_404_NOT_FOUND,
+                                content={"error": f"Container {cnt_id} does not exist"})
         await remove_container(cnt_id)
         # remove repo from user's container_ids dict
         del user.container_ids[repo]
         await user_db.update(user)
-        return {"user": user_email, "cnt_id": cnt_id}
+        return JSONResponse(status_code=status.HTTP_200_OK,
+                            content={"user": user_email, "cnt_id": cnt_id})
     except NotFound:
-        return {"error": f"Container {cnt_id} does not exist"}
+        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND,
+                            content={"error": f"Container {cnt_id} does not exist"})
     except APIError:
-        return {"error": f"Cannot stop container {cnt_id} for user {user_email}"}
+        return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            content={"error": f"Cannot stop container {cnt_id} for user {user_email}"})
 
 
 # TODO: add get_repos
