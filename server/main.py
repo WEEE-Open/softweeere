@@ -17,6 +17,7 @@ from datetime import datetime
 from typing import Dict
 from sys import stderr
 
+from secret import secret_key
 
 cookie_lifetime = 3600  # seconds
 
@@ -94,7 +95,6 @@ async def get_old_or_new_user(user_email: EmailStr):
     return user
 
 
-secret_key = "secret"
 cookie_name = "softweeere"
 cookie_authentication = CookieAuthentication(
     secret=secret_key,
