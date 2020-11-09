@@ -137,6 +137,16 @@ async def root():
     return {"message": "Server is running correctly"}
 
 
+@app.get(api_prefix + "/repos")
+async def get_repos():
+    try:
+        return JSONResponse(status_code=status.HTTP_200_OK,
+                            content=[repo.value for repo in Repository])
+    except Exception:
+        return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            content={"error": "Cannot get available repositories"})
+
+
 @app.get(api_prefix + "/container/{repo}")
 async def get_container(repo: Repository, user_email: EmailStr):
     user = await get_old_or_new_user(user_email)
@@ -209,7 +219,4 @@ async def delete_container(cnt_id: str, repo: Repository, user_email: EmailStr):
     except APIError:
         return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             content={"error": f"Cannot stop container {cnt_id} for user {user_email}"})
-
-
-# TODO: add get_repos
 
