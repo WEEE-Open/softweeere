@@ -1,4 +1,5 @@
 import {Terminal} from "xterm";
+import "xterm/css/xterm.css";
 import {AttachAddon} from "xterm-addon-attach";
 
 export const mountTerminalAtId = id => {
