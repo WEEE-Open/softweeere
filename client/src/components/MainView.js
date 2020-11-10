@@ -74,7 +74,8 @@ const MainView = props => {
                     {/*    />)}*/}
                     {/*TODO: use map like above*/}
                     <DockerTerminal
-
+                        user={user}
+                        repo={repos['weeehire_ng']}
                     />
                 </div> :
                 <div id={"NoEmbeds"}>
