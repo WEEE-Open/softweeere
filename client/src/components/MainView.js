@@ -12,6 +12,12 @@ const MainView = props => {
 
     const [user, setUser] = useState({});
     const [loggedIn, setLoggedIn] = useState(false);
+    const [repos, setRepos] = useState([]);
+
+    const updateRepos = (email) =>
+        API.getRepos(email)
+        .then(json => setRepos(json))
+        .catch(err => console.log(err));
 
     // componentDidMount
     useEffect(() => {
@@ -24,11 +30,14 @@ const MainView = props => {
                             API.login(newOrOldUser.email)
                                 .then(res => setLoggedIn(res === null))
                                 .catch(err => console.log(err));
+                            updateRepos(newOrOldUser.email);
                             setUser(newOrOldUser);
                     });
                 } else {
-                    setUser(User.from(oldUser));
+                    const oldUserObj = User.from(oldUser);
+                    setUser(oldUserObj);
                     setLoggedIn(true);
+                    updateRepos(oldUserObj.email);
                 }
             });
     }, []);
