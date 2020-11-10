@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import {CardColumns, Container} from "react-bootstrap";
-import KatacodaCard from "./mainview/KatacodaCard";
+import DockerCard from "./mainview/DockerCard";
 import KatacodaEmbed from "./mainview/KatacodaEmbed";
 import ScrollUpButton from "react-scroll-up-button";
 import API from "../API";
@@ -56,7 +56,7 @@ const MainView = props => {
             {/*        <h3 className={"d-block d-sm-none"}>Try our software here!</h3>*/}
             {/*        <CardColumns className={"pt-3"}>*/}
             {/*            {embeds.map((embed, idx) =>*/}
-            {/*                <KatacodaCard*/}
+            {/*                <DockerCard*/}
             {/*                key={idx}*/}
             {/*                num={idx}*/}
             {/*                embed={embed}*/}

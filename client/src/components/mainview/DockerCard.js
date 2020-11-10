@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {Button, Card, ListGroup} from "react-bootstrap";
 import {buttonTexts} from "../../utils";
 
-const KatacodaCard = props => {
+const DockerCard = props => {
     const {num, embed, buttonHandler, scrollToBottom} = props;
     const [buttonText, setButtonText] = useState(buttonTexts.toPress);
 
@@ -47,4 +47,4 @@ const KatacodaCard = props => {
     );
 }
 
-export default KatacodaCard;
+export default DockerCard;
