@@ -198,7 +198,9 @@ async def get_container_stream(repo: Repository,
 
 
 @app.delete(api_prefix + "/container/{repo}")
-async def delete_container(cnt_id: str, repo: Repository, user_email: EmailStr):
+async def delete_container(repo: Repository,
+                           user_email: EmailStr = Body(..., embed=True),
+                           cnt_id: str = Body(..., embed=True)):
     user = await get_old_or_new_user(user_email)
     if not user:
         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,
