@@ -1,7 +1,7 @@
 # run with uvicorn main:app --reload
 # deploy with ?
 
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, Body, Request, status
 from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, EmailStr
 from fastapi_users import FastAPIUsers, models
@@ -137,7 +137,7 @@ async def root():
 
 
 @app.post(api_prefix + "/repos")
-async def get_repos(user_email: EmailStr):
+async def get_repos(user_email: EmailStr = Body(..., embed=True)):
     user = await get_old_or_new_user(user_email)
     if not user:
         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,
