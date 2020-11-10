@@ -145,7 +145,7 @@ async def get_repos(user_email: EmailStr = Body(..., embed=True)):
                             content={"error": f"user {user_email} not found"})
     try:
         return JSONResponse(status_code=status.HTTP_200_OK,
-                            content=[repo.name for repo in Repository])
+                            content={repo.name: repo.value for repo in Repository})
     except Exception:
         return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             content={"error": "Cannot get available repositories"})
@@ -187,8 +187,10 @@ async def get_container_stream(repo: Repository,
     try:
         cnt = client.containers.get(cnt_id)
         # TODO: find out needed method for Xterm.js between attach or attach_socket
-        return StreamingResponse(status_code=status.HTTP_200_OK,
-                                 content=cnt.attach(stdout=True, stderr=True, stream=True, demux=False))
+        # return StreamingResponse(status_code=status.HTTP_200_OK,
+        #                          content=cnt.attach(stdout=True, stderr=True, stream=True, demux=False))
+        return JSONResponse(status_code=status.HTTP_200_OK,
+                            content=cnt.attach_socket(stdout=True, stderr=True, stream=True, demux=False))
     except NotFound:
         return JSONResponse(status_code=status.HTTP_404_NOT_FOUND,
                             content={"error": f"Container {cnt_id} does not exist"})
