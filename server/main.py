@@ -145,7 +145,7 @@ async def get_repos(user_email: EmailStr = Body(..., embed=True)):
                             content={"error": f"user {user_email} not found"})
     try:
         return JSONResponse(status_code=status.HTTP_200_OK,
-                            content=[repo.value for repo in Repository])
+                            content=[repo.name for repo in Repository])
     except Exception:
         return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             content={"error": "Cannot get available repositories"})
