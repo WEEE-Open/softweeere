@@ -1,8 +1,8 @@
 # run with uvicorn main:app --reload
 # deploy with ?
 
-from fastapi import FastAPI, Body, Request, status
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi import FastAPI, Body, Request, status, WebSocket, WebSocketDisconnect
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, EmailStr
 from fastapi_users import FastAPIUsers, models
 from fastapi_users.authentication import CookieAuthentication
@@ -14,7 +14,7 @@ from requests.exceptions import ChunkedEncodingError
 
 from enum import Enum
 from datetime import datetime
-from typing import Dict
+from typing import Dict, List
 from sys import stderr
 
 from secret import secret_key
@@ -51,6 +51,25 @@ class UserUpdate(User, models.BaseUserUpdate):
 
 class UserDB(User, models.BaseUserDB):
     pass
+
+
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections: List[WebSocket] = []
+
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connections.append(websocket)
+
+    def disconnect(self, websocket: WebSocket):
+        self.active_connections.remove(websocket)
+
+    async def send_personal_message(self, message: str, websocket: WebSocket):
+        await websocket.send_text(message)
+
+    async def broadcast(self, message: str):
+        for connection in self.active_connections:
+            await connection.send_text(message)
 
 
 # while request is not called directly, it is needed for this function to work
@@ -124,6 +143,8 @@ app.include_router(fastapi_users.get_auth_router(cookie_authentication),
 app.include_router(fastapi_users.get_users_router(),
                    prefix=f"{api_prefix}/users", tags=["users"])
 
+ws_manager = ConnectionManager()
+
 try:
     client = docker.from_env()
 except DockerException:
@@ -171,6 +192,51 @@ async def get_container(repo: Repository, user_email: EmailStr = Body(..., embed
     except APIError:
         return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             content={"repo": repo, "error": "Cannot instantiate Docker container"})
+
+
+# see https://fastapi.tiangolo.com/advanced/websockets/
+# e.g. ws[s]://addr/sardina?cnt_id=abc?user_email=test@example.com
+@app.websocket(api_prefix + "/ws/{repo}")
+async def websocket_endpoint(websocket: WebSocket,
+                             repo: Repository,  # path param
+                             cnt_id: str,  # query param
+                             user_email: EmailStr):  # query param
+    # TODO: WARNING:  Unsupported upgrade request.
+    # also, this is not printed out
+    print(repo, cnt_id, user_email)
+    user = await get_old_or_new_user(user_email)
+    if not user:
+        return JSONResponse(status_code=status.WS_1008_POLICY_VIOLATION,
+                            content={"error": f"user {user_email} not found"})
+    if repo not in user.container_ids or cnt_id != user.container_ids[repo]:
+        return JSONResponse(status_code=status.WS_1008_POLICY_VIOLATION,
+                            content={"error": f"container {cnt_id} does not belong to user {user_email}"})
+    try:
+        cnt = client.containers.get(cnt_id)
+        websocket = cnt.attach_socket(params={"stdout": True,
+                                  "stderr": True,
+                                  "stream": True,
+                                  "demux": False},
+                          ws=True)
+    except NotFound:
+        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND,
+                            content={"error": f"Container {cnt_id} does not exist"})
+    except APIError:
+        return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            content={"error": f"Cannot instantiate stream to container {cnt_id} for user {user_email}"})
+    try:
+        await ws_manager.connect(websocket)
+    except Exception:
+        return JSONResponse(status_code=status.WS_1005_ABNORMAL_CLOSURE,
+                            content={"error": "Cannot connect to websocket"})
+    try:
+        while True:
+            data = await websocket.receive_text()
+            await ws_manager.send_personal_message(f"You wrote: {data}", websocket)
+    except WebSocketDisconnect:
+        ws_manager.disconnect(websocket)
+        return JSONResponse(status_code=status.WS_1000_NORMAL_CLOSURE,
+                            content={"message": f"Closed connection for user {user_email}"})
 
 
 @app.post(api_prefix + "/stream/{repo}")
