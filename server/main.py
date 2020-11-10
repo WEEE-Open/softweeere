@@ -53,6 +53,7 @@ class UserDB(User, models.BaseUserDB):
     pass
 
 
+# while request is not called directly, it is needed for this function to work
 def on_after_register(user: UserDB, request: Request):
     print(f"User {user.email} has registered.")
 
