@@ -43,7 +43,6 @@ class User(models.BaseUser):
 
 class UserCreate(models.BaseUserCreate):
     pass
-    # TODO: use random email as userid in frontend, can't override here in backend
 
 
 class UserUpdate(User, models.BaseUserUpdate):
