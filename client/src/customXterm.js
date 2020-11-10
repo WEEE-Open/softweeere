@@ -9,7 +9,7 @@ export const mountTerminal = (id, repo, cnt_id, email) => {
         foreground: "#00983a",
     });
     // see https://xtermjs.org/docs/api/addons/attach/
-    const socket = new WebSocket(`ws://localhost:3000/${repo}?cnt_id=${cnt_id}?user_email=${email}`);
+    const socket = new WebSocket(`ws://localhost:8000/api/ws/${repo}?cnt_id=${cnt_id}?user_email=${email}`);
     const attachAddon = new AttachAddon(socket);
     term.loadAddon(attachAddon);
     term.open(document.getElementById(id));
