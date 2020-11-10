@@ -12,9 +12,9 @@ const MainView = props => {
 
     const [user, setUser] = useState({});
     const [loggedIn, setLoggedIn] = useState(false);
-    const [repos, setRepos] = useState([]);
+    const [repos, setRepos] = useState({});
 
-    const updateRepos = (email) =>
+    const updateRepos = email =>
         API.getRepos(email)
         .then(json => setRepos(json))
         .catch(err => console.log(err));
