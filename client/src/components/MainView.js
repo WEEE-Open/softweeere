@@ -48,35 +48,39 @@ const MainView = props => {
 
     return (
         <Container id={"MainView"}>
-            {/*{embeds ?*/}
-            {/*    <div id={"Embeds"}>*/}
-            {/*        /!*see https://code.luasoftware.com/tutorials/bootstrap/bootstrap-hide-element-based-on-viewport-size/*!/*/}
-            {/*        <h1 className={"d-none d-md-block"}>Try our software here!</h1>*/}
-            {/*        <h2 className={"d-none d-sm-block d-md-none"}>Try our software here!</h2>*/}
-            {/*        <h3 className={"d-block d-sm-none"}>Try our software here!</h3>*/}
-            {/*        <CardColumns className={"pt-3"}>*/}
-            {/*            {embeds.map((embed, idx) =>*/}
-            {/*                <DockerCard*/}
-            {/*                key={idx}*/}
-            {/*                num={idx}*/}
-            {/*                embed={embed}*/}
-            {/*                buttonHandler={buttonHandler}*/}
-            {/*                scrollToBottom={scrollToBottom}*/}
-            {/*                />)}*/}
-            {/*        </CardColumns>*/}
-            {/*        {embeds*/}
-            {/*        .map((embed, idx) =>*/}
-            {/*            <KatacodaEmbed*/}
-            {/*                key={idx}*/}
-            {/*                num={idx}*/}
-            {/*                embed={embed}*/}
-            {/*                color={color}*/}
-            {/*            />)}*/}
-            {/*    </div> :*/}
-            {/*    <div id={"NoEmbeds"}>*/}
-            {/*        <h1>No embeds added to the website. Maybe there's a configuration error?</h1>*/}
-            {/*    </div>*/}
-            {/*}*/}
+            {embeds ?
+                <div id={"Embeds"}>
+                    {/*see https://code.luasoftware.com/tutorials/bootstrap/bootstrap-hide-element-based-on-viewport-size/*/}
+                    <h1 className={"d-none d-md-block"}>Try our software here!</h1>
+                    <h2 className={"d-none d-sm-block d-md-none"}>Try our software here!</h2>
+                    <h3 className={"d-block d-sm-none"}>Try our software here!</h3>
+                    {/*<CardColumns className={"pt-3"}>*/}
+                    {/*    {embeds.map((embed, idx) =>*/}
+                    {/*        <DockerCard*/}
+                    {/*        key={idx}*/}
+                    {/*        num={idx}*/}
+                    {/*        embed={embed}*/}
+                    {/*        buttonHandler={buttonHandler}*/}
+                    {/*        scrollToBottom={scrollToBottom}*/}
+                    {/*        />)}*/}
+                    {/*</CardColumns>*/}
+                    {/*{embeds*/}
+                    {/*.map((embed, idx) =>*/}
+                    {/*    <KatacodaEmbed*/}
+                    {/*        key={idx}*/}
+                    {/*        num={idx}*/}
+                    {/*        embed={embed}*/}
+                    {/*        color={color}*/}
+                    {/*    />)}*/}
+                    {/*TODO: use map like above*/}
+                    <DockerTerminal
+
+                    />
+                </div> :
+                <div id={"NoEmbeds"}>
+                    <h1>No embeds added to the website. Maybe there's a configuration error?</h1>
+                </div>
+            }
             <ScrollUpButton
                 ContainerClassName="scrollUp"
                 TransitionClassName="transitionUp"
