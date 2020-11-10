@@ -174,7 +174,9 @@ async def get_container(repo: Repository, user_email: EmailStr = Body(..., embed
 
 
 @app.post(api_prefix + "/stream/{repo}")
-async def get_container_stream(cnt_id: str, repo: Repository, user_email: EmailStr):
+async def get_container_stream(repo: Repository,
+                               user_email: EmailStr = Body(..., embed=True),
+                               cnt_id: str = Body(..., embed=True)):
     user = await get_old_or_new_user(user_email)
     if not user:
         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,
