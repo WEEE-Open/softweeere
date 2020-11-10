@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import {CardColumns, Container} from "react-bootstrap";
 import DockerCard from "./mainview/DockerCard";
-import KatacodaEmbed from "./mainview/KatacodaEmbed";
+import DockerTerminal from "./mainview/DockerTerminal";
 import ScrollUpButton from "react-scroll-up-button";
 import API from "../API";
 import User from "../User";
