@@ -213,11 +213,12 @@ async def websocket_endpoint(websocket: WebSocket,
                             content={"error": f"container {cnt_id} does not belong to user {user_email}"})
     try:
         cnt = client.containers.get(cnt_id)
+        # TODO: how to define custom websocket? is this correct?
         websocket = cnt.attach_socket(params={"stdout": True,
-                                  "stderr": True,
-                                  "stream": True,
-                                  "demux": False},
-                          ws=True)
+                                              "stderr": True,
+                                              "stream": True,
+                                              "demux": False},
+                                      ws=True)
     except NotFound:
         return JSONResponse(status_code=status.HTTP_404_NOT_FOUND,
                             content={"error": f"Container {cnt_id} does not exist"})
