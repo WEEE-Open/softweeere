@@ -17,7 +17,9 @@ pycparser==2.20
 pydantic==1.7.2
 PyJWT==1.7.1
 pymongo==3.11.0
+python-engineio==3.13.2
 python-multipart==0.0.5
+python-socketio==4.6.0
 requests==2.24.0
 six==1.15.0
 starlette==0.13.6
