@@ -9,7 +9,7 @@ const MainView = props => {
     const {embeds, buttonHandler, color} = props;
     const bottomOfThePageRef = useRef(null);
 
-    const [repos, setRepos] = useState({});
+    const [repos, setRepos] = useState([]);
 
     // componentDidMount
     useEffect(() => {
@@ -50,7 +50,7 @@ const MainView = props => {
                     {/*    />)}*/}
                     {/*TODO: use map like above*/}
                     <DockerTerminal
-                        repo={repos['weeehire_ng']}
+                        repo={repos[2]}
                     />
                 </div> :
                 <div id={"NoEmbeds"}>
