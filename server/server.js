@@ -61,8 +61,14 @@ const repos = {
     weeehire_ng: `${dockerRegistry}/weeehire-ng_nginx`,
 }
 
+const messages = {
+    containerFound: {"message": "Existing container found for required repo"},
+    containerCreated: {"message": "New container created for required repo"},
+}
+
 const errors = {
     unauthorized: {"error": "No authentication cookie found"},
+    repoNotFound: {"error": "Repository not found"},
 }
 
 // REST API server
@@ -76,6 +82,34 @@ app.get(`${apiPrefix}/repos`, (req, res) => {
     else
         res.status(401).json(errors.unauthorized).end();
 });
+
+app.get(`${apiPrefix}/container/:repo`, ((req, res) => {
+    const repo = req.params.repo;
+    if (!(repo in repos))
+        res.status(404).json(errors.repoNotFound).end();
+    let session = req.session;
+    console.log(session)
+    if (session.repos === undefined)
+        session.repos = {}
+    if (repo in session.repos)
+        res.status(200).json({...messages.containerFound, id: session.repos[repo]}).end();
+    else {
+        docker.createContainer({
+            Image: repos[repo],
+            AttachStdin: false,
+            AttachStdout: true,
+            AttachStderr: true,
+            Tty: false,
+            HostConfig: {
+                PortBindings: {}
+            },
+        }).then(cnt => {
+            session.repos[repo] = cnt.id
+            session.save();
+            res.status(201).json({...messages.containerCreated, id: cnt.id}).end();
+        }).catch(err => res.status(err.statusCode).json(err.json).end());
+    }
+}));
 
 
 // Socket.IO server
