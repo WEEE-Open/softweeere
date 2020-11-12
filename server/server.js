@@ -49,11 +49,6 @@ io.use((socket, next) => {
     // connections, as 'socket.request.res' will be undefined in that case
 });
 
-io.on('connect', (socket) => {
-    const session = socket.request.session;
-    session.connections++;
-    session.save();
-});
 
 const dockerRegistry = "docker.caste.dev";
 const repos = {
@@ -114,6 +109,42 @@ app.get(`${apiPrefix}/container/:repo`, ((req, res) => {
 
 // Socket.IO server
 
+// io.on('connect', (socket) => {
+//     const session = socket.request.session;
+//     session.connections++;
+//     session.save();
+// });
+
+io.on('connection', socket => {
+    const session = socket.request.session;
+    socket.on('exec', (repo, id, w, h) => {
+        if (!(repo in session.repos)) return;
+        const cnt = docker.getContainer(id);
+        cnt.exec({
+           AttachStdout: true,
+           AttachStderr: true,
+           AttachStdin: true,
+           Tty: true,
+           Cmd: ["/bin/bash"],  // assuming every container has bash installed
+        }, (err, exec) => {
+           // cnt.wait();
+           if (err) return;
+           exec.start({
+               Tty: true,
+               stream: true,
+               stdout: true,
+               stderr: true,
+               stdin: true,
+               hijack: true,
+           }, (err, stream) => {
+               if (h !== 0 && w !== 0)
+                   exec.resize({h, w});
+               stream.on('data', chunk => socket.emit('show', chunk.toString()));
+               stream.on('cmd', data => stream.write(data));
+           });
+       });
+   });
+});
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => console.log(`SoftWEEEre server running at http://localhost:${port}`));
