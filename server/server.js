@@ -32,6 +32,7 @@ const sessionMiddleware = session({
     },
     resave: false,
     saveUninitialized: true,  // TODO: set to false to comply with laws that require user accepting cookies
+    // see session data from mongo -> use test; db.sessions.find()
     store: new MongoStore({
         url: "mongodb://localhost:27017",
         ttl: 18 * 60 * 60,  // 18 hours
