@@ -4,7 +4,6 @@ import DockerCard from "./mainview/DockerCard";
 import DockerTerminal from "./mainview/DockerTerminal";
 import ScrollUpButton from "react-scroll-up-button";
 import API from "../API";
-import User from "../User";
 
 const MainView = props => {
     const {embeds, buttonHandler, color} = props;
@@ -51,7 +50,6 @@ const MainView = props => {
                     {/*    />)}*/}
                     {/*TODO: use map like above*/}
                     <DockerTerminal
-                        user={user}
                         repo={repos['weeehire_ng']}
                     />
                 </div> :
