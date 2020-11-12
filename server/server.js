@@ -16,6 +16,8 @@ const options = {
 const server = require('http').createServer(app);
 const io = require('socket.io')(server, options);
 
+app.use(morgan("tiny"));  // add logging
+
 const sessionMiddleware = session({
     name: "softweeere",
     secret: secretKey,
