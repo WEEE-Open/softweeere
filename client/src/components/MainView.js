@@ -10,36 +10,13 @@ const MainView = props => {
     const {embeds, buttonHandler, color} = props;
     const bottomOfThePageRef = useRef(null);
 
-    const [user, setUser] = useState({});
-    const [loggedIn, setLoggedIn] = useState(false);
     const [repos, setRepos] = useState({});
-
-    const updateRepos = email =>
-        API.getRepos(email)
-        .then(json => setRepos(json))
-        .catch(err => console.log(err));
 
     // componentDidMount
     useEffect(() => {
-        API.getCurrentUser()
-            .then(oldUser => {
-                if (oldUser === null) {
-                    API.register()
-                        .then(json => {
-                            const newOrOldUser = User.from(json);
-                            API.login(newOrOldUser.email)
-                                .then(res => setLoggedIn(res === null))
-                                .catch(err => console.log(err));
-                            updateRepos(newOrOldUser.email);
-                            setUser(newOrOldUser);
-                    });
-                } else {
-                    const oldUserObj = User.from(oldUser);
-                    setUser(oldUserObj);
-                    setLoggedIn(true);
-                    updateRepos(oldUserObj.email);
-                }
-            });
+        API.getRepos()
+            .then(json => setRepos(json))
+            .catch(err => console.log(err));
     }, []);
 
     const scrollToBottom = () => {
