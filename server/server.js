@@ -4,7 +4,7 @@ const app = require('express')();
 const morgan = require('morgan');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
-const secretKey = require("secretKey").secretKey;
+const secretKey = require("./secretKey").secretKey;
 
 const options = {
     perMessageDeflate: false,
@@ -24,7 +24,7 @@ const sessionMiddleware = session({
         maxAge: null,  // delete cookie when session ends
     },
     resave: false,
-    saveUnitialized: true,  // TODO: set to false to comply with laws that require user accepting cookies
+    saveUninitialized: true,  // TODO: set to false to comply with laws that require user accepting cookies
     store: new MongoStore({
         url: "mongodb://localhost:27017",
         ttl: 18 * 60 * 60,  // 18 hours
@@ -48,3 +48,4 @@ io.on('connect', (socket) => {
 });
 
 const port = process.env.PORT || 3000;
+server.listen(port);
