@@ -1,82 +1,13 @@
-import {v4 as uuid} from "uuid";
-
 const apiPrefix = "/api";
-// the password is global for every user, since authentication is purely based
-// on randomly generated fake email addresses
-const password = "softweeere";
 
-const getRandomString = () => uuid();
-
-
-async function register() {
+async function getRepos() {
     return new Promise(((resolve, reject) => {
-        const email = `${getRandomString()}@example.com`;
-        fetch(`${apiPrefix}/auth/register`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({email: email, password: password})
-        }).then(res => {
-            if (res.ok)
-                resolve(res.json());
-            else
-                reject(res.json());
-        }).catch(err => reject(err));
-    }));
-}
-
-async function login(email) {
-    return new Promise(((resolve, reject) => {
-        // see https://stackoverflow.com/a/37562814
-        const details = {username: email, password: password}
-        const body = Object.keys(details).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(details[key])}`).join('&');
-        fetch(`${apiPrefix}/auth/login`, {
-            method: "POST",
-            headers: {"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"},
-            body: body
-        }).then(res => {
-            if (res.ok)
-                resolve(null);
-            else
-                reject(res.json());
-        }).catch(err => reject(err));
-    }));
-}
-
-async function isLoggedIn() {
-    return new Promise(((resolve, reject) => {
-        fetch(`${apiPrefix}/users/me`)
-            .then(res => {
-                if (res.ok)
-                    resolve(true);
-                else
-                    resolve(false);
-            }).catch(err => reject(err));
-    }));
-}
-
-async function getCurrentUser() {
-    return new Promise(((resolve, reject) => {
-        fetch(`${apiPrefix}/users/me`)
+        fetch(`${apiPrefix}/repos`)
             .then(res => {
                 if (res.ok)
                     resolve(res.json());
                 else
-                    resolve(null);
-            }).catch(err => reject(err));
-    }));
-}
-
-async function getRepos(email) {
-    return new Promise(((resolve, reject) => {
-        fetch(`${apiPrefix}/repos`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({user_email: email})
-        }).then(res => {
-            if (res.ok)
-                resolve(res.json());
-            else
-                reject(res.json().error);
+                    reject(res.json().error);
         }).catch(err => reject(err));
     }));
 }
@@ -111,5 +42,5 @@ async function deleteContainer(email, repo, cnt_id) {
     }));
 }
 
-const API = {register, login, isLoggedIn, getCurrentUser, getRepos, getContainer, deleteContainer};
+const API = {getRepos, getContainer, deleteContainer};
 export default API;
