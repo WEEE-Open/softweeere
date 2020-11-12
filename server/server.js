@@ -1,10 +1,11 @@
 "use strict";
 
-const app = require('express')();
+const express = require('express');
 const morgan = require('morgan');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const secretKey = require("./secretKey").secretKey;
+const path = require("path");
 
 const options = {
     perMessageDeflate: false,
@@ -13,10 +14,12 @@ const options = {
     //     methods: ["GET", "POST", "DELETE"],
     // }
 }
+const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server, options);
 
 app.use(morgan("tiny"));  // add logging
+app.use("/", express.static(path.join("..", "client", "build")));  // host frontend build static files
 
 const sessionMiddleware = session({
     name: "softweeere",
@@ -50,4 +53,4 @@ io.on('connect', (socket) => {
 });
 
 const port = process.env.PORT || 3000;
-server.listen(port);
+server.listen(port, () => console.log(`SoftWEEEre server running at http://localhost:${port}`));
