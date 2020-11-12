@@ -4,6 +4,7 @@ const app = require('express')();
 const morgan = require('morgan');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
+const secretKey = require("secretKey").secretKey;
 
 const options = {
     perMessageDeflate: false,
@@ -16,17 +17,21 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server, options);
 
 const sessionMiddleware = session({
-    secret: "softweeere",
+    name: "softweeere",
+    secret: secretKey,
     cookie: {
         secure: false,  // TODO: enable when using HTTPS
-        maxAge: 18 * 60 * 60 * 1000,  // 18 hours
+        maxAge: null,  // delete cookie when session ends
     },
+    resave: false,
+    saveUnitialized: true,  // TODO: set to false to comply with laws that require user accepting cookies
     store: new MongoStore({
         url: "mongodb://localhost:27017",
         ttl: 18 * 60 * 60,  // 18 hours
         autoRemove: "native",
     }),
 });
+
 // register middleware in Express
 app.use(sessionMiddleware);
 // register middleware in Socket.IO
