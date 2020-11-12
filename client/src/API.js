@@ -12,17 +12,14 @@ async function getRepos() {
     }));
 }
 
-async function getContainer(email, repo) {
+async function getContainer(repo) {
     return new Promise(((resolve, reject) => {
-        fetch(`${apiPrefix}/container/${repo}`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({user_email: email})
-        }).then(res => {
-            if (res.ok || res.status === 201)
-                resolve(res.json());
-            else
-                reject(res.json().error);
+        fetch(`${apiPrefix}/container/${repo}`)
+            .then(res => {
+                if (res.ok || res.status === 201)
+                    resolve(res.json());
+                else
+                    reject(res.json().error);
         }).catch(err => reject(err));
     }));
 }
