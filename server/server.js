@@ -6,6 +6,8 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const secretKey = require("./secretKey").secretKey;
 const path = require("path");
+const docker = new require('dockerode')();
+const stream = require('stream');
 
 const options = {
     perMessageDeflate: false,
@@ -51,6 +53,21 @@ io.on('connect', (socket) => {
     session.connections++;
     session.save();
 });
+
+const dockerRegistry = "docker.caste.dev";
+const repos = {
+    peracotta: `${dockerRegistry}/peracotta`,
+    sardina: `${dockerRegistry}/sardina`,
+    weeehire_ng: `${dockerRegistry}/weeehire-ng_nginx`,
+}
+
+// REST API server
+
+
+
+
+// Socket.IO server
+
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => console.log(`SoftWEEEre server running at http://localhost:${port}`));
