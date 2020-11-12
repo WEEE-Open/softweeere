@@ -61,9 +61,21 @@ const repos = {
     weeehire_ng: `${dockerRegistry}/weeehire-ng_nginx`,
 }
 
+const errors = {
+    unauthorized: {"error": "No authentication cookie found"},
+}
+
 // REST API server
 
+const apiPrefix = "/api";
 
+app.get(`${apiPrefix}/repos`, (req, res) => {
+    const userId = req.sessionID;
+    if (userId !== undefined)
+        res.status(200).json(Object.keys(repos)).end();
+    else
+        res.status(401).json(errors.unauthorized).end();
+});
 
 
 // Socket.IO server
