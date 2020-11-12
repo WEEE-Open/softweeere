@@ -1,26 +1,27 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {mountTerminal} from "../../customXterm";
+import API from "../../API";
 
 const DockerTerminal = props => {
 
-    const {user, repo} = props;
+    const {repo} = props;
+    const divId = `terminal-${repo}`;
 
-    const id = `terminal-${repo}`;
-    let cnt_id = "";
-    let email = "";
-    if (user.containerIds !== undefined)
-        cnt_id = user.containerIds[repo];
-        email = user.email;
+    const [cntId, setCntId] = useState(null);
+
+    // componentDidMount
+    useEffect(() => {
+        API.getContainer(repo)
+            .then(json => setCntId(json.id))
+            .catch(err => console.log(err));
+    }, [repo]);
 
     useEffect(() => {
-        if (cnt_id && email)
-            mountTerminal(id, repo, cnt_id, email);
-    }, [id, repo, cnt_id, email]);
+        mountTerminal(divId, repo, cntId);
+    }, [divId, repo, cntId]);
 
     return (
-        <div>
-            <div id={id} />
-        </div>
+        <div id={divId} />
     );
 }
 
