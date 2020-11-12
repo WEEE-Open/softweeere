@@ -89,7 +89,6 @@ app.get(`${apiPrefix}/container/:repo`, ((req, res) => {
     if (!(repo in repos))
         res.status(404).json(errors.repoNotFound).end();
     let session = req.session;
-    console.log(session)
     if (session.repos === undefined)
         session.repos = {}
     if (repo in session.repos)
