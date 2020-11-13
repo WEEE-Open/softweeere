@@ -81,7 +81,7 @@ app.get(`${apiPrefix}/repos`, (req, res) => {
 
 app.get(`${apiPrefix}/container/:repo`, ((req, res) => {
     const repo = req.params.repo;
-    if (!(repo in repos))
+    if (!(repo in repos) || repo === "undefined")
         res.status(404).json(errors.repoNotFound).end();
     let session = req.session;
     if (session.repos === undefined)
@@ -91,18 +91,21 @@ app.get(`${apiPrefix}/container/:repo`, ((req, res) => {
     else {
         docker.createContainer({
             Image: repos[repo],
-            AttachStdin: false,
+            AttachStdin: true,
             AttachStdout: true,
             AttachStderr: true,
-            Tty: false,
+            Tty: true,
+            OpenStdin: false,
+            StdinOnce: false,
             HostConfig: {
                 PortBindings: {}
             },
         }).then(cnt => {
             session.repos[repo] = cnt.id
             session.save();
+            cnt.start();
             res.status(201).json({...messages.containerCreated, id: cnt.id}).end();
-        }).catch(err => res.status(err.statusCode).json(err.json).end());
+        }).catch(err => console.log(err) /*res.status(err.statusCode).json(err.json).end()*/);
     }
 }));
 
@@ -115,10 +118,11 @@ app.get(`${apiPrefix}/container/:repo`, ((req, res) => {
 //     session.save();
 // });
 
-io.on('connection', socket => {
+io.on('connect', socket => {
+    console.log("connected")
     const session = socket.request.session;
     socket.on('exec', (repo, id, w, h) => {
-        if (!(repo in session.repos)) return;
+        if (session.repos === undefined || !(repo in session.repos)) return;
         const cnt = docker.getContainer(id);
         cnt.exec({
            AttachStdout: true,
