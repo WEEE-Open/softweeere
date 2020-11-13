@@ -11,9 +11,10 @@ const DockerTerminal = props => {
 
     // componentDidMount
     useEffect(() => {
-        API.getContainer(repo)
-            .then(json => setCntId(json.id))
-            .catch(err => console.log(err));
+        if (repo !== undefined)
+            API.getContainer(repo)
+                .then(json => setCntId(json.id))
+                .catch(err => console.log(err));
     }, [repo]);
 
     useEffect(() => {
